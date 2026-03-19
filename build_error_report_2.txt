@@ -1,0 +1,41 @@
+﻿Building Windows application...                                 
+flutter : lib/secure_viewer_screen.da
+rt(96,30): error GE5CFE876: The 
+method 'add' isn't defined for the 
+type 'FToasterState'. [C:\Users\SAHIL
+\test_out\build\windows\x64\flutter\f
+lutter_assemble.vcxproj]
+At line:1 char:1
++ flutter build windows 2>&1 | 
+Out-File -FilePath 
+"C:\Users\SAHIL\test_ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpe 
+   cified: (lib/secure_view...sembl  
+  e.vcxproj]:String) [], RemoteExc   
+ eption
+    + FullyQualifiedErrorId : Native 
+   CommandError
+ 
+lib/secure_viewer_screen.dart(106,30)
+: error GE5CFE876: The method 'add' 
+isn't defined for the type 
+'FToasterState'. [C:\Users\SAHIL\test
+_out\build\windows\x64\flutter\flutte
+r_assemble.vcxproj]
+C:\Program Files (x86)\Microsoft 
+Visual Studio\18\BuildTools\MSBuild\M
+icrosoft\VC\v180\Microsoft.CppCommon.
+targets(254,5): error MSB8066: 
+Custom build for 'C:\Users\SAHIL\test
+_out\build\windows\x64\CMakeFiles\986
+337abd5db78510eaa7b6ce5018839\flutter
+_windows.dll.rule;C:\Users\SAHIL\test
+_out\build\windows\x64\CMakeFiles\114
+9c08e4dab43d06475d84ca1eee6e0\flutter
+_assemble.rule' exited with code 1. [
+C:\Users\SAHIL\test_out\build\windows
+\x64\flutter\flutter_assemble.vcxproj
+]
+Building Windows application...                                    96.5s
+Build process failed.

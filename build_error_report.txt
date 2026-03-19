@@ -1,0 +1,64 @@
+﻿Building Windows application...                                 
+flutter : 
+lib/dashboard_screen.dart(510,23): 
+error GC6690633: No named parameter 
+with the name 'children'. [C:\Users\S
+AHIL\test_out\build\windows\x64\flutt
+er\flutter_assemble.vcxproj]
+At line:1 char:1
++ flutter build windows 2>&1 | 
+Out-File -FilePath 
+"C:\Users\SAHIL\test_ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpe 
+   cified: (lib/dashboard_s...sembl  
+  e.vcxproj]:String) [], RemoteExc   
+ eption
+    + FullyQualifiedErrorId : Native 
+   CommandError
+ 
+lib/dashboard_screen.dart(566,15): 
+error GC6690633: No named parameter 
+with the name 'fontFamily'. [C:\Users
+\SAHIL\test_out\build\windows\x64\flu
+tter\flutter_assemble.vcxproj]
+lib/secure_viewer_screen.dart(96,34):
+ error GA7C8A1BB: Too many 
+positional arguments: 0 allowed, but 
+1 found. [C:\Users\SAHIL\test_out\bui
+ld\windows\x64\flutter\flutter_assemb
+le.vcxproj]
+lib/secure_viewer_screen.dart(106,34)
+: error GA7C8A1BB: Too many 
+positional arguments: 0 allowed, but 
+1 found. [C:\Users\SAHIL\test_out\bui
+ld\windows\x64\flutter\flutter_assemb
+le.vcxproj]
+lib/secure_viewer_screen.dart(574,13)
+: error GC6690633: No named 
+parameter with the name 
+'previewDecoration'. [C:\Users\SAHIL\
+test_out\build\windows\x64\flutter\fl
+utter_assemble.vcxproj]
+lib/secure_viewer_screen.dart(661,13)
+: error GC6690633: No named 
+parameter with the name 
+'fontFamily'. [C:\Users\SAHIL\test_ou
+t\build\windows\x64\flutter\flutter_a
+ssemble.vcxproj]
+C:\Program Files (x86)\Microsoft 
+Visual Studio\18\BuildTools\MSBuild\M
+icrosoft\VC\v180\Microsoft.CppCommon.
+targets(254,5): error MSB8066: 
+Custom build for 'C:\Users\SAHIL\test
+_out\build\windows\x64\CMakeFiles\986
+337abd5db78510eaa7b6ce5018839\flutter
+_windows.dll.rule;C:\Users\SAHIL\test
+_out\build\windows\x64\CMakeFiles\114
+9c08e4dab43d06475d84ca1eee6e0\flutter
+_assemble.rule' exited with code 1. [
+C:\Users\SAHIL\test_out\build\windows
+\x64\flutter\flutter_assemble.vcxproj
+]
+Building Windows application...                                   123.9s
+Build process failed.

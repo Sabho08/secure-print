@@ -1,0 +1,2 @@
+﻿Building Windows application...                                   195.2s
+ΓêÜ Built build\windows\x64\runner\Release\test_out.exe
