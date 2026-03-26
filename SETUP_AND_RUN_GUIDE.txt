@@ -1,0 +1,580 @@
+================================================================================
+    SECUREPRINT - COMPLETE SETUP AND RUN GUIDE
+    Zero-Footprint Air-Printing Platform
+================================================================================
+
+PROJECT OVERVIEW:
+This project has THREE main components that must run together:
+1. RELAY SERVER (Node.js backend) - Port 3000
+2. FLUTTER APP (Shopkeeper Desktop App) - Windows desktop
+3. REACT WEB APPS (Customer Frontend) - Port 5173 (root) or 8080 (web_app folder)
+
+All three components communicate via Socket.io for real-time file streaming.
+
+================================================================================
+STEP 1: ENVIRONMENT SETUP & PREREQUISITES
+================================================================================
+
+Before you start, make sure you have installed:
+
+A. Node.js (Latest LTS version or v18+)
+   - Download from: https://nodejs.org/
+   - Verify installation:
+     Open Command Prompt and run:
+     > node --version
+     > npm --version
+   
+B. Flutter SDK (for Shopkeeper/Desktop app)
+   - Download from: https://flutter.dev/docs/get-started/install
+   - Add Flutter to your PATH environment variables
+   - Verify installation:
+     > flutter --version
+     > dart --version
+
+C. Git (for cloning the repo)
+   - Download from: https://git-scm.com/
+
+D. Visual Studio Code or your preferred IDE (optional but recommended)
+
+E. Supabase Account (for database and authentication)
+   - Sign up at: https://supabase.com/
+   - You'll need Supabase URL and Anon Key (see STEP 4)
+   
+F. if some of the above are not installed tell user to intall them and also give them a step by step guide on how to do it 
+================================================================================
+STEP 2: CLONE THE REPOSITORY
+================================================================================
+
+1. Open Command Prompt or PowerShell
+2. Navigate to your desired folder where you want the project:
+   > cd C:\YourDesiredPath
+
+3. Clone the repository:
+   > git clone https://github.com/Sabho08/secure-print.git
+   > cd secure-print
+
+4. You should now be in the project root directory which contains:
+   - relay-server/         (Node.js backend)
+   - lib/                  (Flutter Dart code)
+   - src/                  (Root React app)
+   - web_app/              (Alternate React app on port 8080)
+   - New folder/           (Another React app variant)
+   - pubspec.yaml          (Flutter dependencies)
+   - package.json          (Root React dependencies)
+
+================================================================================
+STEP 3: RELAY SERVER SETUP & RUN (Node.js Backend)
+================================================================================
+
+STEP 3.1: Install Dependencies
+----------------------------------------
+1. Open Command Prompt/PowerShell
+2. Navigate to relay-server folder:
+   > cd relay-server
+
+3. Install all Node.js dependencies:
+   > npm install
+   
+   Wait for all packages to download and install. You should see:
+   - cors
+   - dotenv
+   - express
+   - socket.io
+   
+   When complete, you'll see "added X packages"
+
+STEP 3.2: Optional - Configure Environment Variables
+----------------------------------------
+1. Inside relay-server/ folder, create a file named ".env" (if it doesn't exist)
+2. Add these lines (modify values as needed):
+   
+   PORT=3000
+   NODE_ENV=development
+
+3. Save the file
+
+STEP 3.3: Start the Relay Server
+----------------------------------------
+1. Still in relay-server/ folder, run:
+   > node server.js
+
+2. You should see output like:
+   "Server running on port 3000"
+   "Socket.io server listening on port 3000"
+   
+3. Keep this terminal OPEN and running. You'll see live socket connections logged here.
+
+TROUBLESHOOTING RELAY SERVER:
+- If you get "Error: EADDRINUSE: address already in use :::3000"
+  → Port 3000 is already in use. Either:
+    a. Kill the process using port 3000: taskkill /PID <pid> /F
+    b. Change PORT in server.js to 3001 and update all client configs
+    c. Restart your machine
+
+- If "Module not found: express"
+  → Run: npm install again in relay-server folder
+  → Make sure you're in the correct directory
+
+================================================================================
+STEP 4: SUPABASE CONFIGURATION (Database Setup)
+================================================================================
+
+IMPORTANT: Both React and Flutter apps need Supabase credentials
+
+STEP 4.1: Create Supabase Project
+----------------------------------------
+1. Go to https://supabase.com/ and sign up
+2. Create a new project
+3. Once created, go to Settings → API
+4. Copy your:
+   - Project URL (example: https://xxxxxxxxxxxx.supabase.co)
+   - Anon/Public Key (starts with eyJ...)
+
+STEP 4.2: Update Supabase Keys in Flutter App
+----------------------------------------
+1. Open file: lib/shared.dart
+2. Find these lines:
+   const String kSupabaseUrl = 'YOUR_SUPABASE_URL';
+   const String kSupabaseAnonKey = 'YOUR_ANON_KEY';
+
+3. Replace with your actual keys from Supabase:
+   const String kSupabaseUrl = 'https://xxxxxxxxxxxx.supabase.co';
+   const String kSupabaseAnonKey = 'eyJ...';
+
+4. Save the file
+
+STEP 4.3: Update Supabase Keys in React Apps
+----------------------------------------
+A. For root React app (src/utils/supabase.ts):
+   1. Open: src/utils/supabase.ts
+   2. Find: export const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+   3. Either:
+      - Create a .env.local file in root with:
+        VITE_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
+        VITE_SUPABASE_ANON_KEY=eyJ...
+      OR
+      - Update the file directly with your keys
+
+B. For web_app React app (web_app/src/utils/supabase.ts):
+   1. Do the same steps as above but for the web_app folder
+   2. Create .env.local in web_app/ folder with same Supabase keys
+
+C. For New folder app:
+   1. Create .env file or update environment variables similarly
+
+================================================================================
+STEP 5: FLUTTER APP SETUP & RUN (Shopkeeper Desktop App)
+================================================================================
+
+STEP 5.1: Get Flutter Dependencies
+----------------------------------------
+1. Open new Command Prompt/PowerShell
+2. Navigate to project root (where pubspec.yaml is):
+   > cd C:\YourPath\secure-print
+
+3. Get all Flutter dependencies:
+   > flutter pub get
+
+   Wait for completion. You should see "Got dependencies"
+
+STEP 5.2: Enable Windows Build Support (One-time setup)
+----------------------------------------
+1. Run this command once:
+   > flutter config --enable-windows-desktop
+
+2. This enables Windows as a valid platform
+
+STEP 5.3: Run Flutter Desktop App
+----------------------------------------
+1. Make sure Relay Server is STILL RUNNING (from Step 3)
+2. In the same Command Prompt, run:
+   > flutter run -d windows
+
+   First run will take 5-10 minutes as it compiles C++ Windows code
+   Subsequent runs are faster
+
+3. A Windows desktop app window will open - this is the Shopkeeper App
+4. You should see the login/dashboard UI
+
+STEP 5.4: Flutter App Connection
+----------------------------------------
+1. In the Flutter app, you may need to configure the Relay Server address:
+   - Look for settings that specify the server URL
+   - It should connect to http://localhost:3000 (or your relay server address)
+   - If the relay server shows connection logs, the app is connected successfully
+
+TROUBLESHOOTING FLUTTER:
+- If "flutter: command not found"
+  → Add Flutter to PATH environment variable
+  → Restart Command Prompt
+  → Run: flutter doctor -v to verify setup
+
+- If C++ compilation errors occur
+  → Make sure Visual Studio Build Tools are installed
+  → Try: flutter clean
+  → Then: flutter pub get again
+  → Then: flutter run -d windows again
+
+- If app crashes on startup
+  → Check that Supabase keys are correctly updated in lib/shared.dart
+  → Check that Relay Server is running and accessible
+  → Look at Terminal output for specific error messages
+
+================================================================================
+STEP 6: REACT WEB APP SETUP & RUN (Customer Frontend)
+================================================================================
+
+You have THREE React app options:
+- Option A: Root app (src/, runs on port 5173)
+- Option B: web_app folder (src/, runs on default 5173 or configured port)
+- Option C: New folder (runs on port 5173)
+
+CHOOSE ONE to run (typically Option A is the main one).
+
+OPTION A: Root React App (RECOMMENDED)
+----------------------------------------
+1. Open new Command Prompt/PowerShell
+2. Navigate to project root:
+   > cd C:\YourPath\secure-print
+
+3. Install dependencies:
+   > npm install
+
+   This installs all packages from package.json
+   Wait for "added X packages"
+
+4. Start the development server:
+   > npm run dev
+
+   You should see output like:
+   "VITE v7.3.1 ready in 123 ms"
+   "  ➜ Local:   http://localhost:5173/"
+   "  ➜ Press q to quit"
+
+5. Open browser and go to: http://localhost:5173/
+   You should see the customer web interface
+
+OPTION B: web_app React App (Alternative)
+----------------------------------------
+1. Open new Command Prompt/PowerShell
+2. Navigate to web_app folder:
+   > cd C:\YourPath\secure-print\web_app
+
+3. Install dependencies:
+   > npm install
+
+4. Start the development server:
+   > npm run dev
+
+   This runs on port 8080 (configured in vite.config.ts)
+   Go to: http://localhost:8080/
+
+TROUBLESHOOTING REACT APPS:
+- If "npm: command not found"
+  → Node.js is not properly installed
+  → Restart computer and reinstall Node.js
+
+- If port 5173 is already in use
+  → Kill the process: taskkill /PID <pid> /F
+  → Or restart your computer
+  → Or change port in vite.config.ts:
+    server: {
+      port: 5174
+    }
+
+- If you see CORS errors in browser console
+  → Ensure Relay Server is running on port 3000
+  → Check that socket.io client is connecting to correct server address
+  → In src/utils/mockApi.ts or main.tsx, verify server URL
+
+- If Supabase authentication fails
+  → Check that VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set
+  → Verify keys in .env.local file
+  → Make sure Supabase project is active and accessible
+
+================================================================================
+STEP 7: RUNNING ALL THREE COMPONENTS TOGETHER
+================================================================================
+
+IMPORTANT: All three components must run simultaneously for the app to work!
+
+There are TWO ways to do this:
+
+METHOD 1: Using Multiple Command Prompt Windows (EASIEST)
+-------------------------
+1. Open Terminal 1:
+   > cd C:\YourPath\secure-print\relay-server
+   > node server.js
+   [Keep this running - shows "Server running on port 3000"]
+
+2. Open Terminal 2:
+   > cd C:\YourPath\secure-print
+   > flutter run -d windows
+   [App window opens, shows Shopkeeper interface]
+
+3. Open Terminal 3:
+   > cd C:\YourPath\secure-print
+   > npm run dev
+   [Shows "Local: http://localhost:5173/"]
+
+4. Open your web browser and navigate to:
+   http://localhost:5173/
+   
+   You should now see the Customer web app
+
+5. At this point, you have:
+   - Relay Server running (Terminal 1)
+   - Flutter Desktop App running (Terminal 2 + App Window)
+   - React Web App running (Terminal 3 + Browser)
+
+   All three should be able to communicate via Socket.io
+
+METHOD 2: Using VS Code Terminal (VISUAL)
+-------------------------
+1. Open the project in VS Code
+2. Open 3 Terminals in VS Code (Terminal → New Terminal)
+3. In Terminal 1, split into 3 panes and run the commands from METHOD 1
+4. You can see all output in one window
+
+================================================================================
+STEP 8: TESTING THE INTEGRATION
+================================================================================
+
+Once all three components are running:
+
+1. In the React web app (http://localhost:5173/):
+   - Click "Connect" or similar to connect to a terminal
+   - You should see a connection success message
+   - The Relay Server terminal should show socket connection logs
+
+2. In the Flutter Shopkeeper app:
+   - You should see a connection indicator showing "Connected" or similar
+   - The app is ready to receive files
+
+3. To test file streaming:
+   - In React app, try uploading a file
+   - The file bytes should stream through the Relay Server
+   - The Flutter app should receive and display/print the file
+   - The Relay Server terminal should show activity logs
+
+================================================================================
+STEP 9: DEBUGGING TIPS
+================================================================================
+
+GENERAL DEBUGGING:
+- Keep all three terminals visible to watch for errors
+- Check browser console (F12) for JavaScript errors
+- Check Relay Server terminal for socket connection issues
+- Check Flutter console for app-level errors
+
+SOCKET.IO CONNECTION DEBUGGING:
+In React app, open browser console (F12) and look for:
+- "Connected to server" message
+- Socket ID displayed
+- If you see "[Socket.io] disconnected", check if Relay Server is running
+
+FLUTTER DEBUGGING:
+- Run: flutter run -d windows -v (verbose mode) for detailed logs
+- Look for "Connection established" messages
+- Check lib/relay_service.dart for connection logic
+
+SUPABASE DEBUGGING:
+- Go to https://supabase.com/ and open your project
+- Check "Database" → "Tables" to see if data is being saved
+- Check "Auth" to see user accounts
+- Check "Logs" in Settings for any errors
+
+BUILD DEBUGGING:
+- Clear all caches: 
+  > flutter clean
+  > npm cache clean --force
+- Reinstall dependencies:
+  > flutter pub get
+  > npm install
+- Try building again
+
+NETWORK DEBUGGING:
+- Make sure all ports are accessible:
+  - Port 3000: Relay Server
+  - Port 5173: React App (or 8080 for web_app)
+  - Port 3100+: Flutter app communication
+- If on network, ensure firewall allows these ports
+
+================================================================================
+STEP 10: PRODUCTION BUILD (LATER)
+================================================================================
+
+Once development works, you can build production versions:
+
+FLUTTER PRODUCTION BUILD:
+> flutter build windows --release
+
+This creates an executable in: build/windows/runner/Release/
+
+REACT PRODUCTION BUILD:
+> npm run build
+
+This creates: dist/ folder with optimized files
+
+RELAY SERVER PRODUCTION:
+- Set NODE_ENV=production in .env
+- Use a process manager like PM2
+- Deploy to a server (Render, Heroku, AWS, etc.)
+
+================================================================================
+STEP 11: COMMON ISSUES AND SOLUTIONS
+================================================================================
+
+ISSUE 1: "Connection refused" in React app
+SOLUTION:
+- Check if Relay Server is running on port 3000
+- Verify in React code that server URL is http://localhost:3000
+- Check firewall isn't blocking port 3000
+- Restart Relay Server
+
+ISSUE 2: Flutter app shows blank screen
+SOLUTION:
+- Check that Supabase keys are correct in lib/shared.dart
+- Check internet connection
+- Run: flutter clean && flutter pub get
+- Restart the app with: flutter run -d windows
+
+ISSUE 3: npm install fails
+SOLUTION:
+- Clear npm cache: npm cache clean --force
+- Update npm: npm install -g npm@latest
+- Delete node_modules folder: rmdir /s node_modules
+- Run npm install again
+- If still fails, check internet connection
+
+ISSUE 4: Port already in use
+SOLUTION:
+- Find process: netstat -ano | findstr :3000
+- Kill it: taskkill /PID <pid number> /F
+- Or change port in configuration
+- Restart Command Prompt
+
+ISSUE 5: Supabase connection fails
+SOLUTION:
+- Verify keys are correct (copy from Supabase dashboard again)
+- Make sure Supabase project status is "Active"
+- Check internet connection
+- Try signing out and back in
+
+ISSUE 6: React app shows CORS error
+SOLUTION:
+- Ensure Relay Server is running
+- Check that socket.io client URL is correct
+- Verify relay-server/server.js has CORS enabled
+- Check browser console for exact error message
+
+ISSUE 7: File upload doesn't appear in Flutter app
+SOLUTION:
+- Check Relay Server logs for file transfer activity
+- Verify socket connection is established in both apps
+- Check that file size isn't too large
+- Ensure browser console shows no errors
+- Try smaller file first (e.g., 1MB text file)
+
+================================================================================
+STEP 12: QUICK START CHECKLIST
+================================================================================
+
+□ Node.js installed (node --version)
+□ Flutter installed (flutter --version)
+□ Git installed
+□ Supabase account created
+□ Repository cloned
+□ Supabase keys updated in lib/shared.dart
+□ Supabase keys updated in src/utils/supabase.ts
+□ Relay Server dependencies: npm install (in relay-server/)
+□ React dependencies: npm install (in root)
+□ Flutter dependencies: flutter pub get
+□ Terminal 1: Relay Server running (node server.js)
+□ Terminal 2: Flutter app running (flutter run -d windows)
+□ Terminal 3: React app running (npm run dev)
+□ Browser open at http://localhost:5173/
+□ Relay Server shows socket connections in Terminal 1
+□ Flutter app shows connected status
+□ React app shows connected status
+
+================================================================================
+STEP 13: PROJECT STRUCTURE REFERENCE
+================================================================================
+
+secure-print/
+├── relay-server/          ← Node.js backend (Socket.io server)
+│   ├── server.js          ← Main server file
+│   ├── package.json       ← Node dependencies
+│   └── .env               ← Environment variables
+│
+├── lib/                   ← Flutter Dart code (Shopkeeper app)
+│   ├── main.dart          ← Flutter app entry point
+│   ├── shared.dart        ← Supabase config
+│   └── relay_service.dart ← Socket.io client for Flutter
+│
+├── src/                   ← Root React app (Customer frontend)
+│   ├── main.tsx           ← React entry point
+│   ├── App.tsx            ← Main React component
+│   └── utils/
+│       └── supabase.ts    ← Supabase config for React
+│
+├── web_app/               ← Alternative React app
+│   └── src/               ← Same structure as root src/
+│
+├── pubspec.yaml           ← Flutter dependencies
+├── package.json           ← Root React dependencies
+├── vite.config.ts         ← Root React build config
+└── SETUP_AND_RUN_GUIDE.txt ← This file!
+
+================================================================================
+STEP 14: USEFUL COMMANDS REFERENCE
+================================================================================
+
+RELAY SERVER COMMANDS:
+npm install               → Install Node.js packages
+node server.js           → Start the relay server
+npm start                → Run start script (if configured)
+
+FLUTTER COMMANDS:
+flutter pub get          → Get Flutter dependencies
+flutter run -d windows   → Run Windows desktop app
+flutter clean            → Clear build cache
+flutter doctor           → Check Flutter setup
+flutter doctor -v        → Detailed Flutter diagnosis
+
+REACT COMMANDS:
+npm install              → Install npm packages
+npm run dev              → Start development server
+npm run build            → Create production build
+npm run lint             → Check code for errors
+npm run preview          → Preview production build
+
+GIT COMMANDS:
+git clone <url>          → Clone repository
+git status               → Check file changes
+git add .                → Stage all changes
+git commit -m "message"  → Commit changes
+git push                 → Push changes to remote
+
+================================================================================
+STEP 15: GETTING HELP
+================================================================================
+
+If you're stuck:
+
+1. Check the Relay Server terminal for error messages
+2. Open browser Developer Console (F12) and look at errors
+3. Check Flutter console output in Terminal
+4. Search error message online
+5. Check GitHub Issues: https://github.com/Sabho08/secure-print/issues
+6. Review official documentation:
+   - Flutter: https://flutter.dev/docs/
+   - React: https://react.dev/
+   - Node.js: https://nodejs.org/docs/
+   - Supabase: https://supabase.com/docs
+
+================================================================================
+LAST UPDATE: March 2026
+SECURE PRINT DEVELOPMENT TEAM
+================================================================================
