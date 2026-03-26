@@ -135,7 +135,7 @@ const Login: React.FC = () => {
             </motion.div>
 
             {/* Logo / Tagline */}
-            <div className="absolute top-10 left-10 hidden lg:block">
+            <div className="absolute top-28 left-10 hidden lg:block">
                <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white text-[10px] font-black italic">SP</div>
                     <span className="text-xl font-black tracking-tight text-gray-900">SecurePrint</span>

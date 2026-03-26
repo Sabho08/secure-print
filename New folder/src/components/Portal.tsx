@@ -80,7 +80,7 @@ const Portal: React.FC = () => {
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-wetransfer-blue/10 rounded-full blur-[100px]" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-purple-500/10 rounded-full blur-[100px]" />
 
-            <div className="fixed top-8 left-8 flex items-center gap-4 z-20">
+            <div className="fixed top-24 left-8 flex items-center gap-4 z-20">
                 <button 
                   onClick={() => navigate('/shop-code')}
                   className="w-10 h-10 bg-white shadow-sm border border-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 transition-all hover:shadow-md"
@@ -223,10 +223,6 @@ const Portal: React.FC = () => {
                     <span className="text-wetransfer-blue italic">Print it.</span><br />
                     Then forget it.
                 </h1>
-                <p className="mt-6 text-gray-400 font-bold max-w-[440px] text-lg leading-relaxed">
-                   The world's first zero-footprint air-printing platform. 
-                   Files vanish from existence the moment the printer finishes.
-                </p>
             </div>
         </div>
     );
