@@ -6,9 +6,17 @@ Welcome to the SecurePrint repository. This project consists of three integrated
 
 ## 🏗️ Project Architecture
 
-1.  **🏢 Shopkeeper App (Flutter)**: A desktop/mobile dashboard for shopkeepers to manage their printing queue and receive live file streams. Located in the root (`test_out`).
-2.  **📱 Customer App (React/Vite)**: A modern, WeTransfer-style web app for customers to connect to a terminal and stream files. Located in `/New folder`.
+1.  **🏢 Shopkeeper App (Flutter)**: A desktop/mobile dashboard for shopkeepers to manage their printing queue and receive live file streams. Located in the **root** of this repo.
+2.  **📱 Customer App (React/Vite)**: A modern web app for customers to connect to a terminal and stream files. Located in `/web_app`.
 3.  **🚀 Relay Server (Node.js)**: A high-performance Socket.io bridge that pipes file bytes directly between apps without persistent storage. Located in `/relay-server`.
+
+---
+
+## ⚙️ Prerequisites
+
+- **Flutter SDK** ≥ 3.11.x → [Install Flutter](https://docs.flutter.dev/get-started/install)
+- **Node.js** ≥ 18.x → [Install Node.js](https://nodejs.org/)
+- **Dart** ≥ 3.11.x (comes with Flutter)
 
 ---
 
@@ -20,35 +28,43 @@ cd relay-server
 npm install
 node server.js
 ```
-*Port will be active on http://localhost:3000*
+*Server runs on http://localhost:3000*
+
+---
 
 ### 2. Start the Customer App (Frontend)
 ```bash
-cd "New folder"
+cd web_app
 npm install
 npm run dev
 ```
+*Vite dev server runs on http://localhost:5173*
+
+---
 
 ### 3. Start the Shopkeeper App (Flutter)
 ```bash
-# In the root (c:\Users\SAHIL\test_out)
+# From the root of the repo
 flutter pub get
-flutter run -d windows
+flutter run -d windows   # or -d chrome, -d android, -d <deviceId>
 ```
+
+> **Tip:** Run `flutter devices` to see all available devices.
 
 ---
 
 ## 🌩️ Supabase Setup (Database & Auth)
-This project uses **Supabase** for user profiles and print metadata. 
-1.  Initialize your Supabase project.
-2.  Run the SQL schema provided in [supabase_setup_guide.md](file:///C:/Users/SAHIL/.gemini/antigravity/brain/538f74d5-c78f-42f8-ae29-b176e6e16a8b/supabase_setup_guide.md).
-3.  Update the `kSupabaseUrl` and `kSupabaseAnonKey` in:
-    *   Flutter: `lib/shared.dart`
-    *   React: `src/utils/supabase.ts`
+This project uses **Supabase** for user auth and print metadata.
+
+1. Create a free project at [supabase.com](https://supabase.com)
+2. Go to **Settings → API** and copy your `URL` and `anon key`
+3. Update credentials in:
+   - **Flutter** → `lib/shared.dart` (`kSupabaseUrl`, `kSupabaseAnonKey`)
+   - **React** → `web_app/src/utils/supabase.ts`
 
 ---
 
 ## 🛠️ Security Architecture
-*   **Zero-Footprint**: File bytes stay in the memory of the apps and relay server. They are **never** written to a hard disk except for a temporary cache on the printer device which is wiped after the print success.
-*   **Encrypted Streaming**: Data is pushed via secure WebSocket tunnels.
-*   **Auth Protected**: Only registered and logged-in users can initiate a print job.
+- **Zero-Footprint**: File bytes are streamed through memory only — **never** written to any disk on the relay server.
+- **Encrypted Streaming**: Data is pushed via secure WebSocket tunnels.
+- **Auth Protected**: Only registered, logged-in shopkeepers can access the dashboard.
